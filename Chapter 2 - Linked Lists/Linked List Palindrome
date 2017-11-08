@@ -1,0 +1,144 @@
+import java.util.*;
+
+public class LinkedlistPalindrome {
+	
+	static class ListNode {
+		int val;
+		ListNode next;
+		public ListNode(int val) {
+			this.val = val;
+			this.next = null;
+		}
+	}
+
+	/**
+	* Reverse and Compare.
+	*/
+	public static boolean linkedlistPalindrome1(ListNode head) {
+		if (head == null) {
+			return true;
+		}
+
+		List<Integer> list = new ArrayList<>();
+		ListNode node = head;
+		while (node != null) {
+			list.add(node.val);
+			node = node.next;
+		}
+
+		// reverse
+		ListNode dummy = new ListNode(0);
+		dummy.next = head;
+		reverseLinkedList(dummy, head, head.next);
+		node = dummy.next;
+
+		// compare
+		for (int i = 0; i < list.size() && node != null; i++) {
+			if (node.val != list.get(i)) {
+				return false;
+			}
+			node = node.next;
+		}
+
+		return true;
+	}
+
+	public static void reverseLinkedList(ListNode dummy, ListNode head, ListNode then) {
+		if (then == null) {
+			return; 
+		}
+		head.next = then.next;
+		then.next = dummy.next;
+		dummy.next = then;
+		then = head.next;
+		reverseLinkedList(dummy, head, then);
+	}
+
+	/**
+	* Recursive Approach.
+	*/
+	static class ReturnType {
+		ListNode pair;
+		boolean isPalindrome;
+		public ReturnType(ListNode pair, boolean isPalindrome) {
+			this.pair = pair;
+			this.isPalindrome = isPalindrome;
+		}
+	}
+
+	public static boolean linkedlistPalindrome2(ListNode head) {	
+		return helper(head, listLength(head)).isPalindrome;
+	}
+
+	public static ReturnType helper(ListNode node, int length) {
+		if (length == 0) {
+			return new ReturnType(node, true);
+		}
+		if (length == 1) {
+			return new ReturnType(node.next, true);
+		}
+
+		ReturnType result = helper(node.next, length - 2);
+		ListNode returnPair = result.pair.next;
+		boolean isPalindrome = result.isPalindrome && node.val == result.pair.val;
+		
+		return new ReturnType(returnPair, isPalindrome);
+	}
+
+	public static int listLength(ListNode node) {
+		int count = 0;
+		while (node != null) {
+			node = node.next;
+			count++;
+		}
+		return count;
+	}
+
+	/**
+	* Iteritive Approach.
+	*/
+	public static boolean linkedlistPalindrome3(ListNode head) {
+		if (head == null) {
+			return true;
+		}
+
+		ListNode slow = head;
+		ListNode fast = head.next;
+		Stack<Integer> stack = new Stack<>();
+		
+		while (fast != null && fast.next != null) {
+			stack.push(slow.val);
+			slow = slow.next;
+			fast = fast.next.next;
+		}
+
+		if (fast != null) {  // even nodes
+			stack.push(slow.val);
+		}
+		slow = slow.next;
+
+		while (!stack.isEmpty()) {
+			if (slow.val != stack.pop()) {
+				return false;
+			}
+			slow = slow.next;
+		}
+
+		return true;
+	}
+
+	public static void main(String[] args) {
+		ListNode node1 = new ListNode(1);
+		ListNode node2 = new ListNode(2);
+		ListNode node3 = new ListNode(3);
+		ListNode node4 = new ListNode(1);
+		//ListNode node5 = new ListNode(1);
+		node1.next = node2;
+		node2.next = node3;
+		node3.next = node4;
+		//node4.next = node5;
+		System.out.println(linkedlistPalindrome2(node1));
+		System.out.println(linkedlistPalindrome3(node1));
+		System.out.println(linkedlistPalindrome1(node1)); // linkedlist order changed, must be tested at last
+	}	
+}
