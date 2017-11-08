@@ -1,0 +1,66 @@
+public class Solution {
+    /*
+     * @param n: An integer
+     * @return: The sum of a and b
+     * Approach #0. Brain Teasers. The key is "worst case balancing". X + (X - 1) + (X - 2) + ... + 1 = N. 
+     * Formula: X * (X + 1) / 2 = N, solve X. 
+     * So X = (-1 + sqrt(1 + 8N)) / 2.
+     */
+    public int dropEggs(int n) {
+        // Taken ceiling because if we get 13.5 times, we have to try dropping 14 times, instead of 13.
+        return (int)Math.ceil((-1 + Math.pow(1 + 8 * (long)n, 0.5)) / 2); 
+    }
+}
+
+
+public class Solution {
+    /**
+     * @param n an integer
+     * @return an integer
+     * Approach #1. Recursion. Exhaustive Search. (Time Limit Exceeded).
+     * 1) If the egg breaks after dropping from xth floor, then we only need to check for floors lower than x with remaining eggs; 
+     *    so the problem reduces to x-1 floors and n-1 eggs
+     * 2) If the egg doesn’t break after dropping from the xth floor, then we only need to check for floors higher than x; 
+     *    so the problem reduces to k-x floors and n eggs.
+     * W(e, n) = 1 + min{max(W(e -1, i - 1), W(e, n - i))}, i in {2, 3, ……，n}
+     */
+    public int dropEggs(int n) {
+        return helper(2, n);
+    }
+    
+    public int helper(int e, int n){
+        if(n == 1 || n == 0){
+            return n;
+        }
+
+        int res = Integer.MIN_VALUE;
+        int min = Integer.MAX_VALUE;
+        
+        for(int i = 1; i <= n; i++){
+            res = Math.max(helper(e - 1, i - 1), helper(e, n - i));
+            if (res < min){
+                min = res;
+            }
+        }
+        
+        return min + 1;
+    }
+}
+
+
+public class Solution {
+    /**
+     * @param n an integer
+     * @return an integer
+     * Approach #2. DP. Time Complexity: O(nk^2). Auxiliary Space: O(nk).
+     */
+    public int dropEggs(int n){
+        long ans = 0;
+        for (int i = 1; ; ++i) {
+            ans += (long)i;
+            if (ans >= (long)n){
+                return i;
+            }
+        }
+    }
+}
