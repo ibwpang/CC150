@@ -1,0 +1,74 @@
+Given a sorted array arr of distinct integers, write a function indexEqualsValueSearch that returns the lowest index i for 
+which arr[i] == i. Return -1 if there is no such index. Analyze the time and space complexities of your solution and explain its 
+correctness.
+
+Examples:
+input: arr = [-8,0,2,5]
+output: 2 # since arr[2] == 2
+input: arr = [-1,0,3,6]
+output: -1 # since no index in arr satisfies 
+
+FOLLOW UP: what if the values are not distinct? 
+
+// Basic question. Binary Search.
+class Solution {
+
+  static int indexEqualsValueSearch(int[] arr) {
+    if (arr == null) {
+      return -1;
+    }
+    
+    int start = 0;
+    int end = arr.length - 1;
+    while (start + 1 < end) {
+      int mid = start + (end - start) / 2;
+      if (arr[mid] < mid) {
+        start = mid;
+      } else if (arr[mid] > mid) {
+        end = mid;
+      } else {
+        return mid;
+      }
+    }
+    if (arr[start] == start) {
+      return start;
+    }
+    if (arr[end] == end) {
+      return end;
+    }
+    
+    return -1;
+  }
+}
+
+// Follow up question. Recursion. Time complexity: Equivalent to Linear Search. Worst case: O(n), best case: O(logn).
+class Solution {
+  
+  static int indexEqualsValueSearch(int[] arr) {
+    if (arr == null) {
+      return -1;
+    }
+    return helper(arr, 0, arr.length - 1);
+  }
+  
+  public static int helper(int[] arr, int start, int end) {
+    if (start > end) {
+      return -1;
+    }
+    
+    int mid = start + (end - start) / 2;
+    if (arr[mid] == mid) {
+      return mid;
+    }
+    
+    int leftIndex = Math.min(arr[mid], mid - 1);
+    int leftResult = helper(arr, start, leftIndex);
+    if (leftResult != -1) {
+      return leftResult;
+    }
+    
+    int rightIndex = Math.max(arr[mid], mid + 1);
+    int rightResult = helper(arr, rightIndex, end);
+    return rightResult;
+  }
+}
