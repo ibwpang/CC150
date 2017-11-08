@@ -3,7 +3,7 @@ import java.util.*;
 public class StringCompression {
 
 	/**
-    * Version 1. Space: O(1). Single letter doesn't append occurrance.
+    	* Version 1. Space: O(1). Single letter doesn't append occurrance.
 	*/
 	public static String compress1(String str) {
 		if (str == null || str.length() == 0) {
@@ -39,7 +39,7 @@ public class StringCompression {
 	}
 
 	/**
-    * Version 2. Space: O(n). Single letter append occurrance.
+    	* Version 2. Space: O(n). Single letter append occurrance.
 	*/
 	public static String compress2(String str) {
 		if (str == null || str.length() == 0) {
