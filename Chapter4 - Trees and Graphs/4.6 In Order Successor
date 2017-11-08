@@ -1,0 +1,28 @@
+import java.util.*;
+
+public class InOrderSuccessor {
+	class TreeNode {
+		int val;
+		TreeNode left;
+		TreeNode right;
+		public TreeNode(int val) {
+			this.val = val;
+		}
+	}
+
+	public static TreeNode inOrderSuccessor(TreeNode root, TreeNode target) {
+		if (root == null || target == null) {
+			return null;
+		}
+		if (root.val <= target.val) {
+			return inOrderSuccessor(root.right, target);
+		} else {
+			TreeNode result = inOrderSuccessor(root.left, target);
+			return result == null ? null : result;
+		}
+	}
+
+	public static void main(String[] args) {
+
+	}
+}
