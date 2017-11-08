@@ -1,0 +1,78 @@
+// Version 1. Find LCA in BST. We just need to find for the two nodes and see where the path diverge.
+
+// Version 2. Assume two nodes are exist in tree.
+public class Solution {
+    /**
+     * @param root The root of the binary tree.
+     * @param A and B two nodes
+     * @return: Return the LCA of the two nodes.
+     */
+    public TreeNode lowestCommonAncestor(TreeNode root, TreeNode A, TreeNode B){
+        if(root == null || root == A || root == B){
+            return root;
+        }
+        
+        //if there is nothing to return (common nodes), keep dividing
+        TreeNode leftNode = lowestCommonAncestor(root.left, A, B);
+        TreeNode rightNode = lowestCommonAncestor(root.right, A, B);
+        
+        if(leftNode != null && rightNode != null){
+            return root;
+        }
+        if(leftNode != null){
+            return leftNode;
+        }
+        if(rightNode != null){
+            return rightNode;
+        }
+        
+        return null;
+    }
+}
+
+// Version 3. node A or node B may not exist in tree.
+public class Solution {
+    /*
+     * @param root: The root of the binary tree.
+     * @param A: A TreeNode
+     * @param B: A TreeNode
+     * @return: Return the LCA of the two nodes.
+     */
+    class ReturnType {
+        boolean aExist;
+        boolean bExist;
+        TreeNode LCA;
+        public ReturnType(boolean a, boolean b, TreeNode LCA) {
+            this.aExist = a;
+            this.bExist = b;
+            this.LCA = LCA;
+        }        
+    }
+    
+    public TreeNode lowestCommonAncestor3(TreeNode root, TreeNode A, TreeNode B) {
+        return helper(root, A, B).LCA;
+    }
+    
+    public ReturnType helper(TreeNode node, TreeNode A, TreeNode B) {
+        if (node == null) {
+            return new ReturnType(false, false, null);
+        }
+        
+        ReturnType left = helper(node.left, A, B);
+        ReturnType right = helper(node.right, A, B);
+        
+        boolean aExist = left.aExist || right.aExist || node.val == A.val;
+        boolean bExist = left.bExist || right.bExist || node.val == B.val;
+        TreeNode LCA = null;
+        
+        if (left.LCA != null) {
+            LCA = left.LCA;
+        } else if (right.LCA != null) {
+            LCA = right.LCA;
+        } else if (aExist && bExist) {
+            LCA = node;
+        }
+        
+        return new ReturnType(aExist, bExist, LCA);
+    }
+}
