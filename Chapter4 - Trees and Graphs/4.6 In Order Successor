@@ -18,7 +18,7 @@ public class InOrderSuccessor {
 			return inOrderSuccessor(root.right, target);
 		} else {
 			TreeNode result = inOrderSuccessor(root.left, target);
-			return result == null ? null : result;
+			return result == null ? root : result;
 		}
 	}
 
