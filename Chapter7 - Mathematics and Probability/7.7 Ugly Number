@@ -1,0 +1,25 @@
+public class Solution {
+    /*
+     * @param : An integer
+     * @return: the nth prime number as description.
+     * Using Priority Queue: We can derive new ugly numbers based 
+     * on the existed ugly numbers, so we just need to for loop n times. Must use Long type numbers to solve this problem!!!
+     * The time complexity of this approach is O(n*logn).
+     */
+    public int nthUglyNumber(int n) {
+        Queue<Long> queue = new PriorityQueue<>();
+        queue.offer(1L);
+        long answer = 1L;
+        while (n > 0) {
+            answer = queue.poll();
+            n--;
+            while (!queue.isEmpty() && queue.peek() == answer) {
+                queue.poll();
+            }
+            queue.offer(answer * 2L);
+            queue.offer(answer * 3L);
+            queue.offer(answer * 5L);
+        }
+        return (int)answer;
+    }
+}
