@@ -3,6 +3,7 @@ public class Solution {
      * @param root: the root of binary tree
      * @param target: An integer
      * @return: all valid paths
+     * Time: O(nlogn), Space: o(logn).
      */
     public List<List<Integer>> binaryTreePathSum2(TreeNode root, int target) {
         List<List<Integer>> list = new ArrayList<>();
