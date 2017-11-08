@@ -1,0 +1,39 @@
+public class Solution {
+    /*
+     * @param root: the root of binary tree
+     * @param target: An integer
+     * @return: all valid paths
+     */
+    public List<List<Integer>> binaryTreePathSum2(TreeNode root, int target) {
+        List<List<Integer>> list = new ArrayList<>();
+        helper(root, target, list);
+        return list;
+    }
+    
+    public void helper(TreeNode node, int target, List<List<Integer>> list) {
+        if (node == null) {
+            return;
+        }
+        
+        checkSum(node, target, list, new ArrayList<Integer>());
+        helper(node.left, target, list);
+        helper(node.right, target, list);
+    }
+    
+    public void checkSum(TreeNode node, int target, List<List<Integer>> list, List<Integer> templist) {
+        if (node == null) {
+            return;
+        }
+        
+        templist.add(node.val);
+        
+        if (node.val == target) {
+            list.add(new ArrayList<Integer>(templist));
+        }
+        
+        checkSum(node.left, target - node.val, list, templist);
+        checkSum(node.right, target - node.val, list, templist);
+        
+        templist.remove(templist.size() - 1);
+    }
+}
