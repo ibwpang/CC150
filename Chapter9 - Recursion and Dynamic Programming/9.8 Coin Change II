@@ -16,7 +16,6 @@ class Solution {
         if (amount < 0) {
             return 0;
         }
-
         // If there are no coins and n is greater than 0, then no solution exist
         if (pos < 0 && amount > 0) {
             return 0;
@@ -24,5 +23,40 @@ class Solution {
 
         // count is sum of solutions: (i) including S[m], (ii) excluding S[m]
         return helper(coins, amount - coins[pos], pos) + helper(coins, amount, pos - 1);
+    }
+}
+
+
+
+class Solution {
+    /**
+    * Approach #2. Memorized Search. Recomputations of same subproblems can be avoided by constructing a temporary array 
+    * memo[][] in bottom up manner.
+    */
+    public int change(int amount, int[] coins) {
+        Arrays.sort(coins);
+        int[][] memo = new int[amount + 1][coins.length];  // f[i][j] can uniquely record the ways when amount == i && pos == j.
+        return helper(coins, amount, coins.length - 1, memo);
+    }
+    
+    public int helper(int[] coins, int amount, int pos, int[][] memo) {
+        if (amount == 0) {  // If n is 0 then there is 1 solution (do not include any coin)
+            return 1;
+        }
+        if (amount < 0) {   // If n is less than 0 then no solution exists
+            return 0;
+        }
+        if (pos < 0 && amount > 0) {   // If there are no coins and n is greater than 0, then no solution exist
+            return 0;
+        }
+
+        if (memo[amount][pos] != 0) {
+            return memo[amount][pos];
+        }
+        
+        // count is sum of solutions: (i) including S[m], (ii) excluding S[m]
+        memo[amount][pos] = helper(coins, amount - coins[pos], pos, memo) + helper(coins, amount, pos - 1, memo);
+        
+        return memo[amount][pos];
     }
 }
