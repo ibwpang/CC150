@@ -1,0 +1,27 @@
+public class MakeChange {
+	/**
+	* Input: Amount of change should be made.
+	* Output: Number of ways of making change.
+	*/
+	public static int makeChange(int change) {
+		int[] denom = {25, 10, 5, 1};
+		return helper(change, denom, 0);
+	}
+
+	public static int helper(int change, int[] denom, int pos) {
+		if (pos == denom.length - 1) {
+			return 1;
+		}
+
+		int ways = 0;
+		for (int i = 0; i * denom[pos] <= change; i++) {
+			ways += helper(change - i * denom[pos], denom, pos + 1);
+		}
+		
+		return ways;
+	}
+
+	public static void main(String[] args) {
+		System.out.println(makeChange(15));
+	}
+}
