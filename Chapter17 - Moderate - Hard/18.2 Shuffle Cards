@@ -1,0 +1,10 @@
+public class ShuffleCards {
+  public static void shuffle(int[] cards) {
+    for (int i = 0; i < cards.length; i++) {
+      int index = (int)(Math.random() * (cards.length - i)) + i;
+      int temp = cards[i];
+      cards[i] = cards[index];
+      cards[index] = temp;
+    }
+  }
+}
