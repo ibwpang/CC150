@@ -1,27 +1,28 @@
-public class MakeChange {
-	/**
-	* Input: Amount of change should be made.
-	* Output: Number of ways of making change.
-	*/
-	public static int makeChange(int change) {
-		int[] denom = {25, 10, 5, 1};
-		return helper(change, denom, 0);
-	}
+class Solution {
+    /**
+    * Approach #1. Recursion. Exhaustive Search.
+    */
+    public int change(int amount, int[] coins) {
+        Arrays.sort(coins);
+        return helper(coins, amount, coins.length - 1);
+    }
+    
+    public int helper(int[] coins, int amount, int pos) {
+        // If n is 0 then there is 1 solution (do not include any coin)
+        if (amount == 0) {
+            return 1;
+        }
+        // If n is less than 0 then no solution exists
+        if (amount < 0) {
+            return 0;
+        }
 
-	public static int helper(int change, int[] denom, int pos) {
-		if (pos == denom.length - 1) {
-			return 1;
-		}
+        // If there are no coins and n is greater than 0, then no solution exist
+        if (pos < 0 && amount > 0) {
+            return 0;
+        }
 
-		int ways = 0;
-		for (int i = 0; i * denom[pos] <= change; i++) {
-			ways += helper(change - i * denom[pos], denom, pos + 1);
-		}
-		
-		return ways;
-	}
-
-	public static void main(String[] args) {
-		System.out.println(makeChange(15));
-	}
+        // count is sum of solutions: (i) including S[m], (ii) excluding S[m]
+        return helper(coins, amount - coins[pos], pos) + helper(coins, amount, pos - 1);
+    }
 }
